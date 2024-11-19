@@ -264,7 +264,7 @@ const ConfidenceIntervalSimulator = () => {
                       dataKey="mean"
                       fill="#ff7300"
                       shape="diamond"
-                      size={60}
+                      r={4}
                     />
                   </ComposedChart>
                 </ResponsiveContainer>
