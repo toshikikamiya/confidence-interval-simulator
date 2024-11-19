@@ -1,5 +1,10 @@
 import React from 'react';
-import ConfidenceIntervalSimulator from '../components/ConfidenceIntervalSimulator';
+import dynamic from 'next/dynamic';
+
+const ConfidenceIntervalSimulator = dynamic(
+  () => import('@/components/ConfidenceIntervalSimulator'),
+  { ssr: false }
+);
 
 export default function Home() {
   return (
