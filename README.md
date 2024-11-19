@@ -1,0 +1,2 @@
+# confidence-interval-simulator
+信頼区間の意味を理解するためのインタラクティブシミュレータ
