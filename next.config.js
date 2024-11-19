@@ -1,10 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',  // Static HTML出力用
-  basePath: process.env.GITHUB_ACTIONS ? '/confidence-interval-simulator' : '',
+  output: 'export',
+  basePath: '/confidence-interval-simulator',
+  trailingSlash: true,
   images: {
     unoptimized: true,
   },
+  assetPrefix: '/confidence-interval-simulator/',
 }
 
 module.exports = nextConfig
