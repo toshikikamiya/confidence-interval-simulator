@@ -7,8 +7,30 @@ import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Github } from "lucide-react";
 
+// 型定義
+interface Interval {
+  id: number;
+  x: number;
+  lower: number;
+  upper: number;
+  mean: number;
+}
+
+interface IntervalDataPoint {
+  id: number;
+  x: number;
+  y1: number;
+  y2: number;
+}
+
+interface MeanDataPoint {
+  id: number;
+  x: number;
+  mean: number;
+}
+
 // 正規分布の累積分布関数のテーブル
-const normalTable = {
+const normalTable: Record<number, number> = {
   1.28: 0.90,
   1.44: 0.925,
   1.645: 0.95,
@@ -26,21 +48,21 @@ const getZScore = (confidenceLevel: number): number => {
   
   const entries = Object.entries(normalTable);
   const closest = entries.reduce((prev, curr) => {
-    return Math.abs(curr[1] - probability) < Math.abs(prev[1] - probability) ? curr : prev;
+    return Math.abs(Number(curr[1]) - probability) < Math.abs(Number(prev[1]) - probability) ? curr : prev;
   });
   
   return parseFloat(closest[0]);
 };
 
 const ConfidenceIntervalSimulator = () => {
-  const [sampleSize, setSampleSize] = useState(30);
-  const [confidenceLevel, setConfidenceLevel] = useState(95);
-  const [numTrials, setNumTrials] = useState(20);
-  const [intervals, setIntervals] = useState<Array<any>>([]);
+  const [sampleSize, setSampleSize] = useState<number>(30);
+  const [confidenceLevel, setConfidenceLevel] = useState<number>(95);
+  const [numTrials, setNumTrials] = useState<number>(20);
+  const [intervals, setIntervals] = useState<Interval[]>([]);
   const [population, setPopulation] = useState<number[]>([]);
-  const [populationMean, setPopulationMean] = useState(0);
-  const [isCalculating, setIsCalculating] = useState(false);
-  const [error, setError] = useState("");
+  const [populationMean, setPopulationMean] = useState<number>(0);
+  const [isCalculating, setIsCalculating] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
 
   // 母集団を生成する関数
   const generatePopulation = useCallback(() => {
@@ -72,7 +94,7 @@ const ConfidenceIntervalSimulator = () => {
 
       const zScore = getZScore(confidenceLevel);
 
-      const newIntervals = Array.from({ length: numTrials }, (_, i) => {
+      const newIntervals: Interval[] = Array.from({ length: numTrials }, (_, i) => {
         // ランダムにサンプルを抽出
         const sample = Array.from({ length: sampleSize }, () => 
           population[Math.floor(Math.random() * population.length)]);
@@ -107,8 +129,8 @@ const ConfidenceIntervalSimulator = () => {
 
   // データを整形
   const { intervalData, meanData, containsTrue } = useMemo(() => {
-    const intervalData = [];
-    const meanData = [];
+    const intervalData: IntervalDataPoint[] = [];
+    const meanData: MeanDataPoint[] = [];
     let containsTrue = 0;
     
     intervals.forEach(interval => {
